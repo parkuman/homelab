@@ -13,9 +13,15 @@ I started this project in January, 2025. It currently runs on a used Acer Chrome
 - my website
 - [AnyType](https://anytype.io/) - for note taking
 - [Jellyfin](https://jellyfin.org/) - media streaming
-- PiHole or similar
+- PiHole / AdGuard or similar
+- Home Assistant
 
-## Tooling
+## Setup
 
-- OS - Debian
-- k3s
+- Proxmox
+  - virtualize the one server i have into multiple machines to simulate a K3S cluster
+  - some apps might be better suited as a VM (home assistant) - proxmox helps with this
+- K3S Cluster
+  - 2 debian nodes
+    - 1 control plane node
+    - 1 worker node (for now, plan to extend this via more VMs or more physical servers later if needed)

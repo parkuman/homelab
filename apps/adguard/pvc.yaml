@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: adguard
+  namespace: adguard
+  labels:
+    app: adguard
+spec:
+  accessModes:
+    - ReadWriteOnce # only mount on a single node at a time
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-path # default in k3s

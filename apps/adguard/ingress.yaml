@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: adguard
+  namespace: adguard
+  labels:
+    app: adguard
+  annotations:
+    kubernetes.io/ingress.class: traefik # tells K3S explicitly to use Traefik
+spec:
+  rules:
+    - host: adguard.homelab.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: adguard
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - adguard.homelab.local
+      secretName: adguard-tls

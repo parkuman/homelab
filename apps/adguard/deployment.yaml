@@ -15,6 +15,21 @@ spec:
       labels:
         app: adguard
     spec:
+      # copy over the configmap to the volume
+      initContainers:
+        - name: setup-config
+          image: busybox
+          command: ["sh", "-c"]
+          args:
+            - |
+              if [ ! -f /opt/adguardhome/conf/AdGuardHome.yaml ]; then
+                cp /tmp/config/AdGuardHome.yaml /opt/adguardhome/conf/AdGuardHome.yaml
+              fi
+          volumeMounts:
+            - name: config
+              mountPath: /opt/adguardhome/conf
+            - name: initial-config
+              mountPath: /tmp/config
       containers:
         - name: adguard
           image: adguard/adguardhome:v0.107.66

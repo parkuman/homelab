@@ -20,7 +20,7 @@ spec:
           image: adguard/adguardhome:v0.107.66
           ports:
             - name: web
-              containerPort: 3000
+              containerPort: 80
               protocol: TCP
             - name: http
               containerPort: 853

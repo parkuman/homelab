@@ -26,8 +26,9 @@ spec:
                 cp /tmp/config/AdGuardHome.yaml /opt/adguardhome/conf/AdGuardHome.yaml
               fi
           volumeMounts:
-            - name: config
+            - name: adguard-data
               mountPath: /opt/adguardhome/conf
+              subPath: conf
             - name: initial-config
               mountPath: /tmp/config
       containers:
@@ -57,3 +58,6 @@ spec:
         - name: adguard-data
           persistentVolumeClaim:
             claimName: adguard-data
+        - name: initial-config
+          configMap:
+            name: adguard-config

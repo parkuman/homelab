@@ -8,6 +8,7 @@ metadata:
 spec:
   selector:
     app: adguard
+  type: NodePort # makes the service reachable on node IPs
   ports:
     - name: http
       protocol: TCP
@@ -17,7 +18,9 @@ spec:
       port: 53
       targetPort: 53
       protocol: UDP
+      nodePort: 3053
     - name: dns-tcp
       port: 53
       targetPort: 53
       protocol: TCP
+      nodePort: 3053

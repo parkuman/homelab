@@ -8,19 +8,25 @@ metadata:
 spec:
   selector:
     app: adguard
-  type: NodePort # makes the service reachable on node IPs
+  type: NodePort
   ports:
     - name: http
       protocol: TCP
       port: 80
       targetPort: 80 # this is a bit tricky because by default the adguard container will listen on 3000 during the wizard, and we want to expose 80 the rest of the time
-    - name: dns-udp
-      port: 53
-      targetPort: 53
-      protocol: UDP
-      nodePort: 3053
+      nodePort: 30080
     - name: dns-tcp
+      protocol: TCP
       port: 53
       targetPort: 53
+      nodePort: 30053 # Accessible as node-ip:30053
+    - name: dns-udp
+      protocol: UDP
+      port: 53
+      targetPort: 53
+      nodePort: 30053 # Same port for UDP
+    - name: dns-over-tls
       protocol: TCP
-      nodePort: 3053
+      port: 853
+      targetPort: 853
+      nodePort: 30853

@@ -16,11 +16,11 @@ spec:
       targetPort: 80 # this is a bit tricky because by default the adguard container will listen on 3000 during the wizard, and we want to expose 80 the rest of the time
     - name: dns-tcp
       protocol: TCP
-      port: 5353 # Use non-standard port to avoid conflicts
+      port: 53
       targetPort: 53
     - name: dns-udp
       protocol: UDP
-      port: 5353
+      port: 53
       targetPort: 53
     - name: dns-over-tls
       protocol: TCP

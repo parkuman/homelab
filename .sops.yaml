@@ -1,0 +1,8 @@
+creation_rules:
+  # general rules
+  - path_regex: \.yaml$
+    encrypted_regex: "^(data|stringData)$"
+    pgp: 51607E4B2723738E208AE431159B2C984C037373
+  - path_regex: \.yml$
+    encrypted_regex: "^(data|stringData)$"
+    pgp: 51607E4B2723738E208AE431159B2C984C037373

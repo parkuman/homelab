@@ -1,4 +1,9 @@
 creation_rules:
+  # specific files
+  - path_regex: apps/external-dns/secret\.yaml$
+    encrypted_regex: "^(.*password.*)$"
+    pgp: 51607E4B2723738E208AE431159B2C984C037373
+
   # general rules
   - path_regex: \.yaml$
     encrypted_regex: "^(data|stringData)$"

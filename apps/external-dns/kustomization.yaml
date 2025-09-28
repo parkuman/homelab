@@ -3,6 +3,6 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
-  - secret.yaml
+  - adguard-secret.yaml
   - helmrepository.yaml
   - helmrelease.yaml

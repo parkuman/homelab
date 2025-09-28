@@ -5,9 +5,10 @@ metadata:
   namespace: whoami
   annotations:
     kubernetes.io/ingress.class: traefik
+    external-dns.alpha.kubernetes.io/hostname: whoami.home.lab
 spec:
   rules:
-    - host: whoami.homelab.local
+    - host: whoami.home.lab
       http:
         paths:
           - path: /

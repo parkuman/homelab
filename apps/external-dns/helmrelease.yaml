@@ -22,9 +22,6 @@ spec:
       - service
       - ingress
 
-    extraArgs:
-      - --log-level=debug
-
     provider:
       name: webhook
       webhook:

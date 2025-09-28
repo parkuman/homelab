@@ -22,6 +22,9 @@ spec:
       - service
       - ingress
 
+    extraArgs:
+      - --webhook-provider-url=http://localhost:8888
+
     provider:
       name: webhook
       webhook:

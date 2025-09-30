@@ -1,0 +1,116 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-prometheus-stack-values
+  namespace: monitoring
+data:
+  values.yaml: |
+    alertmanager:
+      enabled: false
+
+    prometheus:
+      prometheusSpec:
+        retention: 5d
+        retentionSize: 5GB
+
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 5Gi
+
+        # Service discovery: scrape all ServiceMonitors across all namespaces
+        serviceMonitorSelector: {}
+        serviceMonitorNamespaceSelector: {}
+        podMonitorSelector: {}
+        podMonitorNamespaceSelector: {}
+
+    grafana:
+      enabled: true
+
+      adminPassword: changeme # will be overwritten by sops
+      
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+
+      persistence:
+        enabled: true
+        size: 5Gi
+        accessModes:
+          - ReadWriteOnce
+
+      sidecar:
+        datasources:
+          enabled: true
+          defaultDatasourceEnabled: true  # This enables the built-in Prometheus datasource
+
+      dashboardProviders:
+        dashboardproviders.yaml:
+          apiVersion: 1
+          providers:
+            - name: 'default'
+              orgId: 1
+              folder: ''
+              type: file
+              disableDeletion: false
+              editable: true
+              options:
+                path: /var/lib/grafana/dashboards/default
+
+      env:
+        GF_SERVER_ROOT_URL: "http://grafana.home.lab"
+        GF_SECURITY_ADMIN_USER: parker
+
+    # Enable the built-in kube-prometheus-stack dashboards
+    # These come as part of the chart
+    defaultDashboardsEnabled: true
+    defaultDashboardsTimezone: utc
+
+    # Individual dashboard components
+    # These create ConfigMaps that the Grafana sidecar imports
+    grafana-dashboards:
+      enabled: true
+
+    # This tells the chart to create dashboard ConfigMaps
+    # for all the common Kubernetes monitoring dashboards
+    kubeApiServer:
+      enabled: true
+
+    kubelet:
+      enabled: true
+
+    kubeControllerManager:
+      enabled: false  # K3s runs this differently
+
+    coreDns:
+      enabled: true
+
+    kubeEtcd:
+      enabled: false  # K3s embedded etcd
+
+    kubeScheduler:
+      enabled: false  # K3s runs this differently
+
+    kubeProxy:
+      enabled: true
+
+    kubeStateMetrics:
+      enabled: true
+
+    nodeExporter:
+      enabled: true

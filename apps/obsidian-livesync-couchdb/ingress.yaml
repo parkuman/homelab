@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: obsidian-livesync-couchdb
+  namespace: obsidian-livesync-couchdb
+  labels:
+    app: obsidian-livesync-couchdb
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    external-dns.alpha.kubernetes.io/hostname: obsidian-livesync-couchdb.home.lab
+spec:
+  rules:
+    - host: obsidian-livesync-couchdb.home.lab
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: obsidian-livesync-couchdb
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - obsidian-livesync-couchdb.home.lab
+      secretName: obsidian-livesync-couchdb-tls

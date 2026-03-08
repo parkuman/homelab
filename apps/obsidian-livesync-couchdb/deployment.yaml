@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: obsidian-livesync-couchdb
+  namespace: obsidian-livesync-couchdb
+  labels:
+    app: obsidian-livesync-couchdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: obsidian-livesync-couchdb
+  template:
+    metadata:
+      labels:
+        app: obsidian-livesync-couchdb
+    spec:
+      containers:
+        - name: obsidian-livesync-couchdb
+          image: couchdb:3.5.1
+          ports:
+            - containerPort: 5984
+              name: http
+          env:
+            - name: COUCHDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb-credentials
+                  key: COUCHDB_USER
+            - name: COUCHDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb-credentials
+                  key: COUCHDB_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /opt/couchdb/data
+            - name: config
+              mountPath: /opt/couchdb/etc/local.d/local.ini
+              subPath: local.ini
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+
+          livenessProbe:
+            httpGet:
+              path: /_up
+              port: 5984
+            initialDelaySeconds: 30
+            perdiodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /_up
+              port: 5984
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: obsidian-livesync-couchdb-data
+        - name: config
+          persistentVolumeClaim:
+            claimName: obsidian-livesync-couchdb-config

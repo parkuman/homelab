@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: obsidian-livesync-couchdb
+  namespace: obsidian-livesync-couchdb
+spec:
+  selector:
+    app: obsidian-livesync-couchdb
+  ports:
+    - port: 5984
+      targetPort: 5984
+      protocol: TCP
+      name: http

@@ -66,5 +66,5 @@ spec:
           persistentVolumeClaim:
             claimName: obsidian-livesync-couchdb-data
         - name: config
-          persistentVolumeClaim:
-            claimName: obsidian-livesync-couchdb-config
+          configMap:
+            name: couchdb-config

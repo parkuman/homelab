@@ -25,6 +25,3 @@ data:
     [cors]
     credentials = true
     origins = *
-
-    [admins]
-    parker = super-secret-password

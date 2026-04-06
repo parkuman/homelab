@@ -8,13 +8,9 @@ metadata:
 data:
   local.ini: |
     [chttpd]
-    require_valid_user = true
     enable_cors = true
     bind_address = 0.0.0.0
     port = 5984
-
-    [chttpd_auth]
-    require_valid_user = true
 
     [httpd]
     enable_cors = true

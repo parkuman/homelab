@@ -17,10 +17,11 @@ data:
 
     [couchdb]
     single_node = true
+    max_document_size = 50000000
 
     [cors]
     credentials = true
-    origins = *
+    origins = app://obsidian.md,capacitor://localhost,http://localhost
 
     [admins]
     parker = super-secret-password

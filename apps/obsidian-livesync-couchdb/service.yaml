@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: obsidian-livesync-couchdb
   namespace: obsidian-livesync-couchdb
+  labels:
+    app: obsidian-livesync-couchdb
 spec:
   selector:
     app: obsidian-livesync-couchdb

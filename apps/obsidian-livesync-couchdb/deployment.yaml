@@ -18,6 +18,7 @@ spec:
       containers:
         - name: obsidian-livesync-couchdb
           image: couchdb:3.5.1
+          command: ["/opt/couchdb/bin/couchdb"] # skip the docker-entrypoint script and run couchdb directly
           ports:
             - containerPort: 5984
               name: http

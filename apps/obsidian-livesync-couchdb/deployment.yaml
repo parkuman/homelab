@@ -15,13 +15,30 @@ spec:
       labels:
         app: obsidian-livesync-couchdb
     spec:
-      containers:
-        - name: obsidian-livesync-couchdb
+      initContainers:
+        - name: copy-couchdb-config
           image: couchdb:3.5.1
-          command: ["/opt/couchdb/bin/couchdb"] # skip the docker-entrypoint script and run couchdb directly
-          ports:
-            - containerPort: 5984
-              name: http
+          command:
+            - sh
+            - -c
+            - cp /tmp/couchdb-config/local.ini /opt/couchdb/etc/local.d/local.ini
+          volumeMounts:
+            - name: couchdb-config
+              mountPath: /tmp/couchdb-config
+              readOnly: true
+            - name: couchdb-config-writable
+              mountPath: /opt/couchdb/etc/local.d
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 20m
+              memory: 64Mi
+      containers:
+        - name: setup-users
+          image: couchdb:3.5.1
+          command: ["/bin/sh", "/scripts/setup.sh"]
           env:
             - name: COUCHDB_USER
               valueFrom:
@@ -34,37 +51,72 @@ spec:
                   name: couchdb-credentials
                   key: COUCHDB_PASSWORD
           volumeMounts:
-            - name: data
+            - name: couchdb-setup
+              mountPath: /scripts
+              readOnly: true
+            - name: couchdb-users
+              mountPath: /etc/couchdb-users
+              readOnly: true
+          resources:
+            requests:
+              cpu: 5m
+              memory: 16Mi
+            limits:
+              cpu: 100m
+              memory: 32Mi
+        - name: obsidian-livesync-couchdb
+          image: couchdb:3.5.1
+          env:
+            - name: COUCHDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb-credentials
+                  key: COUCHDB_USER
+            - name: COUCHDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb-credentials
+                  key: COUCHDB_PASSWORD
+          ports:
+            - name: couchdb
+              containerPort: 5984
+              protocol: TCP
+          volumeMounts:
+            - name: couchdb-data
               mountPath: /opt/couchdb/data
-            - name: config
+            - name: couchdb-config-writable
               mountPath: /opt/couchdb/etc/local.d
-
+          livenessProbe:
+            tcpSocket:
+              port: couchdb
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: couchdb
+            initialDelaySeconds: 5
+            periodSeconds: 10
           resources:
             requests:
               cpu: 100m
-              memory: 128Mi
+              memory: 256Mi
             limits:
               cpu: 500m
-              memory: 256Mi
-
-          livenessProbe:
-            httpGet:
-              path: /_up
-              port: 5984
-            initialDelaySeconds: 30
-            perdiodSeconds: 10
-
-          readinessProbe:
-            httpGet:
-              path: /_up
-              port: 5984
-            initialDelaySeconds: 10
-            periodSeconds: 5
+              memory: 512Mi
 
       volumes:
-        - name: data
+        - name: couchdb-data
           persistentVolumeClaim:
-            claimName: obsidian-livesync-couchdb-data
-        - name: config
+            claimName: couchdb-data
+        - name: couchdb-config
           configMap:
             name: couchdb-config
+        - name: couchdb-config-writable
+          emptyDir: {}
+        - name: couchdb-setup
+          configMap:
+            name: couchdb-setup
+            defaultMode: 0755
+        - name: couchdb-users
+          secret:
+            secretName: couchdb-users

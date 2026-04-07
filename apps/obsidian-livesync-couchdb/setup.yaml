@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: couchdb-setup
+data:
+  setup.sh: |
+    #!/bin/sh
+    set -eu
+
+    COUCHDB_URL="http://localhost:5984"
+    AUTH="${COUCHDB_USER}:${COUCHDB_PASSWORD}"
+
+    echo "[setup] Waiting for CouchDB..."
+    until curl -sf "${COUCHDB_URL}/_up" > /dev/null 2>&1; do
+      sleep 2
+    done
+    echo "[setup] CouchDB is ready"
+
+    curl -sf -X PUT "http://${AUTH}@localhost:5984/_users" > /dev/null 2>&1 || true
+    curl -sf -X PUT "http://${AUTH}@localhost:5984/_replicator" > /dev/null 2>&1 || true
+
+    while IFS=: read -r username password database; do
+      [ -z "$username" ] && continue
+      case "$username" in \#*) continue ;; esac
+
+      echo "[setup] Processing user: ${username}"
+
+      if curl -sf "http://${AUTH}@localhost:5984/_users/org.couchdb.user:${username}" > /dev/null 2>&1; then
+        echo "[setup] User ${username} already exists, skipping"
+      else
+        curl -sf -X PUT \
+          "http://${AUTH}@localhost:5984/_users/org.couchdb.user:${username}" \
+          -H "Content-Type: application/json" \
+          -d "{\"name\":\"${username}\",\"password\":\"${password}\",\"roles\":[],\"type\":\"user\"}" \
+          > /dev/null 2>&1 && echo "[setup] User ${username} created" \
+          || echo "[setup] Failed to create user ${username}"
+      fi
+
+      if [ -n "$database" ]; then
+        curl -sf -X PUT \
+          "http://${AUTH}@localhost:5984/${database}" \
+          > /dev/null 2>&1 && echo "[setup] Database ${database} created" \
+          || echo "[setup] Database ${database} already exists"
+
+        curl -sf -X PUT \
+          "http://${AUTH}@localhost:5984/${database}/_security" \
+          -H "Content-Type: application/json" \
+          -d "{\"members\":{\"names\":[\"${username}\"],\"roles\":[]},\"admins\":{\"names\":[],\"roles\":[]}}" \
+          > /dev/null 2>&1 && echo "[setup] Security set for ${database}" \
+          || echo "[setup] Failed to set security for ${database}"
+      fi
+    done < /etc/couchdb-users/users.conf
+
+    echo "[setup] User setup complete, sleeping..."
+    sleep infinity

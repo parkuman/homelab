@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: couchdb-users
+type: Opaque
+stringData:
+  # In the format:
+  # parker:somesecretpassword:obsidian-livesync
+  # someuser:somesecretpassword:somedatabasetheyshouldbeabletoaccess
+  users.conf: ENC[AES256_GCM,data:1AXNd4u/UlTM7Kced+/HrRGUiqL9QbjDg0Jyp4P1tG+8y395Ss4lSgnx2C2Z7eHR9/M=,iv:JAUER0URt0I96U0n1dC5jzIrsPmRYuNeAJgimN0i8xM=,tag:8uyidIhU45fYZO1emlCbPw==,type:str]
+sops:
+  lastmodified: "2026-04-07T00:34:10Z"
+  mac: ENC[AES256_GCM,data:jevYErqDXabNHxe4bNQcF6vuZeJy+33qD0Y8+jQM/SOHoL8BoWHMUxJoj+qboSgWHmCNP+BABxmnElX46bqwkbY2j7GtjmR1+Xg7EhYDO72ufWwa05rI76/VqzQXlU2mYzAZGV57GO0J7tUxqRChwbqqOJlJ0/0R780jsPlMKVg=,iv:/Gj6X+GX36C4CJbOMWmWogl0rPccz40cHcVxh2spgwk=,tag:KLUB7SB4pR1V3KHTQaqV9g==,type:str]
+  pgp:
+    - created_at: "2026-04-07T00:34:10Z"
+      enc: |-
+        -----BEGIN PGP MESSAGE-----
+
+        hF4D44demlMMu+gSAQdAcXDusu/StBeDOqgIqxeo1efdB71qy5qkWgyfJbIsDxAw
+        kEF85jMGE1wdufPC79ShzyoO0kPQporbzDUvylhfATXHw5AdBVvetOLo/IN5INXG
+        1GYBCQIQlX2gLB6JfDVzIIGI24cSpC2HL9iMKyjDfpeVxESrrxGWA8CX3M45e2sL
+        7Qn+D+N8limIBh6xEPKVnglH5/zdJ5fTrDRMWrKtQpqJGia/B2ItQ7GrUBLyfH4C
+        YTddA/XXsow=
+        =Sb1c
+        -----END PGP MESSAGE-----
+      fp: 0B0AB6E6DFA207454D32AED712F9EDBB3FFB06A6
+  encrypted_regex: ^(.*users.conf.*)$
+  version: 3.10.2

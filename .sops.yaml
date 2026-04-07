@@ -4,8 +4,12 @@ creation_rules:
     encrypted_regex: "^(.*password.*)$"
     pgp: 0B0AB6E6DFA207454D32AED712F9EDBB3FFB06A6
 
-  - path_regex: apps/obsidian-livesync-couchdb/couchdb-credentials\.yaml$
+  - path_regex: apps/obsidian-livesync-couchdb/credentials\.sops\.yaml$
     encrypted_regex: "^(.*COUCHDB_PASSWORD.*)$"
+    pgp: 0B0AB6E6DFA207454D32AED712F9EDBB3FFB06A6
+
+  - path_regex: apps/obsidian-livesync-couchdb/users\.sops\.yaml$
+    encrypted_regex: "^(.*users.conf.*)$"
     pgp: 0B0AB6E6DFA207454D32AED712F9EDBB3FFB06A6
 
   # general rules

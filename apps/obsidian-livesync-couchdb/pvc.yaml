@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: obsidian-livesync-couchdb-data
+  name: couchdb-data
   namespace: obsidian-livesync-couchdb
   labels:
     app: obsidian-livesync-couchdb
@@ -10,4 +10,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 500Mi

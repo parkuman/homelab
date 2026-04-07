@@ -2,6 +2,9 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: couchdb-users
+  namespace: obsidian-livesync-couchdb
+  labels:
+    app: obsidian-livesync-couchdb
 type: Opaque
 stringData:
   # In the format:

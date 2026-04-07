@@ -2,6 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: couchdb-setup
+  namespace: obsidian-livesync-couchdb
+  labels:
+    app: obsidian-livesync-couchdb
 data:
   setup.sh: |
     #!/bin/sh

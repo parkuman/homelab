@@ -16,7 +16,7 @@ spec:
       interval: 5m
   values:
     domainFilters:
-      - home.lab
+      - home.prowe.ca
 
     sources:
       - service

@@ -6,11 +6,12 @@ metadata:
   labels:
     app: adguard
   annotations:
-    kubernetes.io/ingress.class: traefik # tells K3S explicitly to use Traefik
-    external-dns.alpha.kubernetes.io/hostname: adguard.home.lab
+    kubernetes.io/ingress.class: traefik
+    external-dns.alpha.kubernetes.io/hostname: adguard.home.prowe.ca
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
-    - host: adguard.home.lab
+    - host: adguard.home.prowe.ca
       http:
         paths:
           - path: /
@@ -22,5 +23,5 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - adguard.home.lab
+        - adguard.home.prowe.ca
       secretName: adguard-tls

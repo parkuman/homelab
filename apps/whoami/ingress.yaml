@@ -5,10 +5,11 @@ metadata:
   namespace: whoami
   annotations:
     kubernetes.io/ingress.class: traefik
-    external-dns.alpha.kubernetes.io/hostname: whoami.home.lab
+    external-dns.alpha.kubernetes.io/hostname: whoami.home.prowe.ca
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
-    - host: whoami.home.lab
+    - host: whoami.home.prowe.ca
       http:
         paths:
           - path: /
@@ -18,3 +19,7 @@ spec:
                 name: whoami
                 port:
                   number: 80
+  tls:
+    - hosts:
+        - whoami.home.prowe.ca
+      secretName: whoami-tls

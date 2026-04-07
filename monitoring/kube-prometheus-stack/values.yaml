@@ -73,7 +73,7 @@ data:
                 path: /var/lib/grafana/dashboards/default
 
       env:
-        GF_SERVER_ROOT_URL: "http://grafana.home.lab"
+        GF_SERVER_ROOT_URL: "http://grafana.home.prowe.ca"
         GF_SECURITY_ADMIN_USER: parker
 
     # Enable the built-in kube-prometheus-stack dashboards

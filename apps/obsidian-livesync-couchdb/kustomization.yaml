@@ -8,3 +8,5 @@ resources:
   - namespace.yaml
   - pvc.yaml
   - service.yaml
+  - setup.yaml
+  - users.sops.yaml

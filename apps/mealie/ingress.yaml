@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mealie
+  namespace: mealie
+  labels:
+    app: mealie
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    external-dns.alpha.kubernetes.io/hostname: mealie.home.prowe.ca
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+    - host: mealie.home.prowe.ca
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mealie
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - mealie.home.prowe.ca
+      secretName: mealie-tls

@@ -3,5 +3,6 @@ kind: Kustomization
 resources:
   - adguard
   - external-dns
+  - mealie
   - obsidian-livesync-couchdb
   - whoami

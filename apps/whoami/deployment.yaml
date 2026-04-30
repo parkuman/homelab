@@ -18,3 +18,9 @@ spec:
           image: traefik/whoami:v1.11.0
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 5m
+            limits:
+              memory: 32Mi

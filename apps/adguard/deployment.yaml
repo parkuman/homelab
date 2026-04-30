@@ -31,6 +31,12 @@ spec:
               subPath: conf
             - name: initial-config
               mountPath: /tmp/config
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 5m
+            limits:
+              memory: 32Mi
       containers:
         - name: adguard
           image: adguard/adguardhome:v0.107.66
@@ -47,6 +53,12 @@ spec:
             - name: dns-tcp
               containerPort: 53
               protocol: TCP
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 50m
+            limits:
+              memory: 256Mi
           volumeMounts:
             - name: adguard-data
               mountPath: /opt/adguardhome/conf
